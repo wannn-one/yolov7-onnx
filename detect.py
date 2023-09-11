@@ -1,14 +1,14 @@
 import cv2
 
-from yolov7 import YOLOv7
-from yolov7.utils import draw_fps
+from yolo.YOLOv7 import YOLOv7
+from yolo.utils import draw_fps
 
 # Initialize the webcam
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 
 # Initialize YOLOv7 object detector
-model_path = "models/only_ball.onnx"
-yolov7_detector = YOLOv7(model_path, conf_thres=0.8, iou_thres=0.5)
+model_path = "trained/yolov7-tiny.onnx"
+yolov7_detector = YOLOv7(model_path, conf_thres=0.25, iou_thres=0.5)
 
 while cap.isOpened():
 
