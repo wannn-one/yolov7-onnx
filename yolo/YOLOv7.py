@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import onnxruntime
 
-from yolo.utils import xywh2xyxy, nms, draw_detections, draw_fps
+from yolo.utils import xywh2xyxy, nms, draw_fps
 
 
 class YOLOv7:
@@ -14,19 +14,13 @@ class YOLOv7:
         self.official_nms = official_nms
         self.inference_time = 0
         self.fps = 0
-
-        # Initialize model
         self.initialize_model(path)
 
     def __call__(self, image):
         return self.detect_objects(image)
 
     def initialize_model(self, path):
-        # check available providers
-        print("Available providers: ", onnxruntime.get_available_providers())
-
-        self.session = onnxruntime.InferenceSession(path,
-                                                    providers=['CPUExecutionProvider'])
+        self.session = onnxruntime.InferenceSession(path, providers=['CPUExecutionProvider'])
         # Get model info
         self.get_input_details()
         self.get_output_details()
@@ -160,11 +154,6 @@ class YOLOv7:
         boxes = np.divide(boxes, input_shape, dtype=np.float32)
         boxes *= np.array([self.img_width, self.img_height, self.img_width, self.img_height])
         return boxes
-
-    def draw_detections(self, image, draw_scores=True, mask_alpha=0.4):
-
-        return draw_detections(image, self.boxes, self.scores,
-                               self.class_ids, mask_alpha)
 
     def get_input_details(self):
         model_inputs = self.session.get_inputs()
